@@ -1,4 +1,6 @@
 # Markdown
+set :build_dir, '../public/docs/'
+
 set :markdown_engine, :redcarpet
 set :markdown,
     fenced_code_blocks: true,
