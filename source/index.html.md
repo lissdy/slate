@@ -55,7 +55,7 @@ access_token是HI平台的全局唯一票据，第三方调用各接口时都需
 
 ### HTTP请求
 
-`GET http://develop.cm-inv.com/api/v1/incident_requests/categories.json`
+`GET http://develop.cm-inv.com/api/v1/incident_requests/categories`
 
 ### Input Parameters
 
@@ -71,14 +71,14 @@ access_token是HI平台的全局唯一票据，第三方调用各接口时都需
 
 ### HTTP请求
 
-`POST http://develop.cm-inv.com/api/v1/incident_requests.json`
+`POST http://develop.cm-inv.com/api/v1/incident_requests`
 
 ### Input Parameters
 
 参数名称 |  描述  | 示例值
 --------- | ----------- | -----------
 owner_name | 业主名称| 小白
-owner_phone |业主电话| 13800138000
+owner_phone |业主电话| 13901028246
 property_number | 报修房间编号| A11-a-a-02-01
 category_one | 报修一级类型id| 0088000I5oZvTbnqzM4OHI
 category_two | 报修二级类型id| 0088000I5oZvTbnqzTH9km
@@ -111,7 +111,7 @@ describing | 报修问题描述| 楼道里面的灯泡爆炸咯
 
 ### HTTP请求
 
-`GET http://develop.cm-inv.com/api/v1/incident_requests.json`
+`GET http://develop.cm-inv.com/api/v1/incident_requests`
 
 ### Input Parameters
 
@@ -135,7 +135,7 @@ owner_phone |业主电话| 13901028246
 
 ### HTTP请求
 
-`GET http://develop.cm-inv.com/api/v1/incident_requests/show.json`
+`GET http://develop.cm-inv.com/api/v1/incident_requests/show`
 
 ### Input Parameters
 
