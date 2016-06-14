@@ -92,34 +92,44 @@ describing | 报修问题描述| 楼道里面的灯泡爆炸咯
 
 ## 3.3 服务单列表
 
+根据业主信息查询所属服务单
+
 ```json
 {
-    "status_code": 200  //根据调用结果返回状态码
+    "result": {
+        "incident_requests": [
+            {
+                "request_number=": "01201606146471",
+                "property_number=": "A11-a-a-02-01",
+                "contact_person=": "小白"
+            }
+        ]
+    },
+    "status_code": "200"
 }
 ```
 
 ### HTTP请求
 
-`POST http://develop.cm-inv.com/api/v1/incident_requests.json`
+`GET http://develop.cm-inv.com/api/v1/incident_requests.json`
 
 ### Input Parameters
 
 参数名称 |  描述  | 示例值
 --------- | ----------- | -----------
 owner_name | 业主名称| 小白
-owner_phone |业主电话| 13800138000
-property_number | 报修房间编号| A11-a-a-02-01
-category_one | 报修一级类型id| 0088000I5oZvTbnqzM4OHI
-category_two | 报修二级类型id| 0088000I5oZvTbnqzTH9km
-category_three | 报修三级类型id| 0088000I5oZvTbnqzanJBY
-describing | 报修问题描述| 楼道里面的灯泡爆炸咯
+owner_phone |业主电话| 13901028246
 
 
 ## 3.4 服务单详情
 
 ```json
 {
-    "status_code": 200  //根据调用结果返回状态码
+    "result": {
+        "request_number=": "01201606146471"
+         ...... //服务单信息
+    },
+    "status_code": 200
 }
 ```
 
@@ -131,7 +141,7 @@ describing | 报修问题描述| 楼道里面的灯泡爆炸咯
 
 参数名称 |  描述  | 示例值
 --------- | ----------- | -----------
-request_number | 服务单号| 01201606141145
+request_number | 服务单号| 01201606146471
 
 
 
