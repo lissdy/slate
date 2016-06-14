@@ -1,15 +1,6 @@
 ---
 title: API Reference
 
-language_tabs:
-  - shell
-  - ruby
-  - python
-
-toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
-
 includes:
   - errors
 
@@ -22,143 +13,127 @@ search: true
 
 # 2.认证
 
-> To authorize, use this code:
+平台使用Oauth2.0认证协议，调用分为三个步骤：获取access_token、使用access_token调用接口、access_token有效期过期后刷新access_token。
 
-```ruby
-require 'kittn'
+access_token是HI平台的全局唯一票据，第三方调用各接口时都需使用access_token。请进行妥善保存。access_token的存储至少要保留512个字符空间。access_token的有效期目前为2小时，需定时刷新，重复获取将导致上次获取的access_token失效。
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
+<aside class="warning">当前测试接口为公开接口，无需认证流程</aside>
 
-```python
-import kittn
+# 3.业主端
 
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
+## 3.1 获取报修类型
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+    "result": {
+        "id": "0088000I5oZvTbnqz7wkts",  //报修类型id
+        "name": "服务单三级类型",
+        "children": [
+            {
+                "id": "0088000I5oZvTbnqzM4OHI",
+                "name": "楼道",
+                "children": [
+                    {
+                        "id": "0088000I5oZvTbnqzTH9km",
+                        "name": "灯泡",
+                        "children": [
+                            {
+                                "id": "0088000I5oZvTbnqzanJBY",
+                                "name": "爆炸"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "status_code": 200
 }
 ```
 
-This endpoint retrieves a specific kitten.
+获取服务单三级报修类型
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+### HTTP请求
 
-### HTTP Request
+`GET http://develop.cm-inv.com/api/v1/incident_requests/categories.json`
 
-`GET http://example.com/kittens/<ID>`
+### Input Parameters
 
-### URL Parameters
+无
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+## 3.2 服务单报修
+
+```json
+{
+    "status_code": 200  //根据调用结果返回状态码
+}
+```
+
+### HTTP请求
+
+`POST http://develop.cm-inv.com/api/v1/incident_requests.json`
+
+### Input Parameters
+
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+owner_name | 业主名称| 小白
+owner_phone |业主电话| 13800138000
+property_number | 报修房间编号| A11-a-a-02-01
+category_one | 报修一级类型id| 0088000I5oZvTbnqzM4OHI
+category_two | 报修二级类型id| 0088000I5oZvTbnqzTH9km
+category_three | 报修三级类型id| 0088000I5oZvTbnqzanJBY
+describing | 报修问题描述| 楼道里面的灯泡爆炸咯
+
+<aside class="notice">
+若传入的业主信息不存在时，系统同步创建该业主。
+</aside>
+
+
+## 3.3 服务单列表
+
+```json
+{
+    "status_code": 200  //根据调用结果返回状态码
+}
+```
+
+### HTTP请求
+
+`POST http://develop.cm-inv.com/api/v1/incident_requests.json`
+
+### Input Parameters
+
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+owner_name | 业主名称| 小白
+owner_phone |业主电话| 13800138000
+property_number | 报修房间编号| A11-a-a-02-01
+category_one | 报修一级类型id| 0088000I5oZvTbnqzM4OHI
+category_two | 报修二级类型id| 0088000I5oZvTbnqzTH9km
+category_three | 报修三级类型id| 0088000I5oZvTbnqzanJBY
+describing | 报修问题描述| 楼道里面的灯泡爆炸咯
+
+
+## 3.4 服务单详情
+
+```json
+{
+    "status_code": 200  //根据调用结果返回状态码
+}
+```
+
+### HTTP请求
+
+`GET http://develop.cm-inv.com/api/v1/incident_requests/show.json`
+
+### Input Parameters
+
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+request_number | 服务单号| 01201606141145
+
+
+
+
 
