@@ -73,9 +73,7 @@ status |请求的服务单状态| DONE
 
 code |  描述
 --------- | -----------
-NEW_ASSIGN | 待办
-SOURCE | 发起
-DONE | 经办或已完结
+DONE | 已完结
 PENDING |处理中
 
 
@@ -168,6 +166,53 @@ describing | 报修问题描述| 小西在报修哦
 --------- | ----------- | -----------
 request_number | 服务单号| 01201606146471
 
+
+# 5.物业端
+
+## 5.1 服务单列表
+
+**说明：此接口为客户端与平台交互的初始接口，故在该接口的调用时，需传入用户身份信息（姓名、电话），以便获取随后进行身份标识的token值。**
+
+根据物业人员信息查询所属服务单
+
+```json
+{
+  "result": {
+    "incident_requests": [
+      {
+        "request_number=": "01201606161281",
+        "contact_person=": "孔大娘",
+         //......
+      }
+    ]
+  },
+   //后续请求赋在HTTP头中
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJicF9pZCI6IjAwNVkwMDA5MHZxNTNSaEZYMWE5MzIifQ.",
+  "status_code": "200"
+}
+```
+
+### HTTP请求
+
+`GET http://develop.cm-inv.com/api/v1/incident_requests`
+
+### Input Parameters
+
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+role | 用户角色，在物业端调用时，该值为STAFF | STAFF
+user_name | 物业人员名称| 小藏
+user_phone |物业人员电话| 15284413186
+status |请求的服务单状态| DONE
+
+
+### status value
+
+code |  描述
+--------- | -----------
+NEW_ASSIGN | 待办
+SOURCE | 发起
+DONE | 经办
 
 
 
