@@ -353,6 +353,33 @@ REPAIR |维修
 ### Input Parameters
 无
 
+## 5.6 创建维修记录
+```json
+//传入服务单编号不存在或结算方参数未传递时
+{
+  "status_code": 400,
+  "errmsg": "invalid params"
+}
+//创建成功返回
+{
+  "status_code": 200
+}
+```
+创建维修记录
+### HTTP请求
+*HTTP头附加token信息*
+
+`POST http://develop.cm-inv.com/api/v1/incident_requests/repair`
+
+### Input Parameters
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+request_number | 服务单编号(必输)| 01201606165729
+pay_party | 结算方code(必输)| TENANT_SETT
+settlement| 是否现场结算（Y为是，N为否）| Y
+repair_reason| 故障原因维修记录|换了个马桶
+add_explain| 备注| 孔大爷很满意
+
 
 
 
