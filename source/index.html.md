@@ -201,7 +201,7 @@ request_number | 服务单号| 01201606146471
 参数名称 |  描述  | 示例值
 --------- | ----------- | -----------
 role | 用户角色，在物业端调用时，该值为STAFF | STAFF
-user_name | 物业人员名称| 小藏
+user_name | 物业人员名称| 孔老师
 user_phone |物业人员电话| 15284413186
 status |请求的服务单状态| DONE
 
@@ -213,6 +213,108 @@ code |  描述
 NEW_ASSIGN | 待办
 SOURCE | 发起
 DONE | 经办
+
+## 5.2 报修节点
+
+```json
+//无参数时，返回当前物业人员所辖小区列表
+{
+  "result": {
+    "cascade_nodes": [
+      {
+        "id": "006i000A0ruXeusRVEbFaq",
+        "structure_name": "花园小区"
+      },
+      {
+        "id": "006i000P1O8ppJGdzz4oQi",
+        "structure_name": "青年汇"
+      },
+      {
+        "id": "006i000P1OFDRaNLKrmjqa",
+        "structure_name": "怡海花园"
+      }
+    ]
+  },
+  "status_code": 200
+}
+//"传入parent_id：'006i000A0ruXeusRVEbFaq'查询花园小区下属结构"
+{
+  "result": {
+    "cascade_nodes": [
+      {
+        "id": "006i000A0ruBgEarUOOAfQ",
+        "structure_name": "1号楼"
+      },
+      {
+        "id": "006i000A0ruBgEarUPe264",
+        "structure_name": "2号楼"
+      },
+      {
+        "id": "006i000A0ruBgEarUQvJ9U",
+        "structure_name": "3号楼"
+      }
+    ]
+  },
+  "status_code": 200
+}
+```
+获取报修节点
+
+### HTTP请求
+*HTTP头附加token信息*
+
+`GET http://develop.cm-inv.com/api/v1/structures/cascade_nodes`
+
+### Input Parameters
+
+无或parent_id
+
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+parent_id | 父级建筑结构id | 006i000A0ruXeusRVEbFaq(花园小区)
+
+
+## 5.3 服务单报修
+
+> 同业主端[服务单报修](#4-3)
+
+
+## 5.4 服务单状态变更
+
+
+```json
+//'传入服务单编号不存在或不合法的action'
+{
+  "status_code": 400,
+  "errmsg": "invalid params"
+}
+//'状态成功变更或时间成功记录'
+{
+  "status_code": 200
+}
+```
+
+
+针对服务单的‘开始接单’，‘开始维修’，‘确认完成’三个动作进行状态变迁或活动时间纪录。
+
+### HTTP请求
+*HTTP头附加token信息*
+
+`PUT http://develop.cm-inv.com/api/v1/incident_requests/:id(附服务单编号)`
+
+### Input Parameters
+
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+action | 针对服务单的操作动作| DONE确认完成
+
+### action value
+code |  描述
+--------- | -----------
+DONE | 确认完成
+RECEIVE |接单
+REPAIR |维修
+
 
 
 
