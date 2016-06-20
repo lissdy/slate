@@ -380,6 +380,36 @@ settlement| 是否现场结算（Y为是，N为否）| Y
 repair_reason| 故障原因维修记录|换了个马桶
 add_explain| 备注| 孔大爷很满意
 
+## 5.7 物料搜索
+```json
+{
+  "result": {
+	"material": [
+		{
+		"material_name": "消毒液11",
+		"material_number": "item00130716",
+		"sh_name": "青年汇仓库001",
+		"material_count": 24
+		}
+	  ]
+    },
+   "status_code": 200
+}
+```
+
+
+对指定项目内的库存按照名称进行模糊查询
+### HTTP请求
+*HTTP头附加token信息*
+
+`GET http://develop.cm-inv.com/api/v1/wm_materials/search`
+
+### Input Parameters
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+project_id | 项目id| 005O000P1O8TqcyP1rdgdE
+material_name | 物料名称| 消毒液
+
 
 
 
