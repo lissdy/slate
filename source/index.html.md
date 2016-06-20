@@ -316,6 +316,44 @@ RECEIVE |接单
 REPAIR |维修
 
 
+## 5.5 获取结算方
+```json
+{
+  "result": {
+    "pay_parts": [
+      {
+        "name": "业主结算",
+        "code": "OWNER_SETT"
+      },
+      {
+        "name": "物业结算",
+        "code": "TENANT_SETT"
+      },
+      {
+        "name": "公共维修基金结算",
+        "code": "ALL_SETTLE"
+      },
+      {
+        "name": "其他",
+        "code": "OTHER_SETT"
+      }
+    ]
+  },
+  "status_code": 200
+}
+```
+
+
+获取维修记录中的结算方列表
+### HTTP请求
+*HTTP头附加token信息*
+
+`GET http://develop.cm-inv.com/api/v1/incident_requests/pay_parts`
+
+### Input Parameters
+无
+
+
 
 
 
