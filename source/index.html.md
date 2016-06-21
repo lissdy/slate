@@ -43,14 +43,20 @@ access_token是HI平台的全局唯一票据，第三方调用各接口时都需
   "result": {
     "incident_requests": [
       {
-        "request_number=": "01201606161281",
+        "request_number=": "01201606213389",
+        "node=": "花园小区3号楼1单元2层202室",
         "contact_person=": "小西",
-         //......
+        "category=": "楼道=>灯泡=>爆炸"
+      },
+      {
+        "request_number=": "01201606214663",
+        "node=": "花园小区3号楼3单元1层101室",
+        "contact_person=": "小西",
+        "category=": "楼道=>灯泡=>爆炸"
       }
     ]
   },
-   //后续请求赋在HTTP头中
-  "token": "yJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJicF9pZCI6IjAwNVkwMDA5MHZxNTNSaEZYMWE5MzIifQ.",
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJicF9pZCI6IjAwNVkwMDBBMHNUZFlReGZTZzl4T2kifQ.",
   "status_code": "200"
 }
 ```
@@ -66,7 +72,7 @@ access_token是HI平台的全局唯一票据，第三方调用各接口时都需
 role | 用户角色，在业主端调用时，该值为OWNER | OWNER
 user_name | 业主名称| 小西
 user_phone |业主电话| 15800703186
-status |请求的服务单状态| DONE
+status |请求的服务单状态| PENDING
 
 
 ### status value
@@ -141,17 +147,25 @@ category_one | 报修一级类型id| 0088000I5oZvTbnqzM4OHI
 category_two | 报修二级类型id| 0088000I5oZvTbnqzTH9km
 category_three | 报修三级类型id| 0088000I5oZvTbnqzanJBY
 describing | 报修问题描述| 小西在报修哦
+repairpic | 维修前图片| 上传维修前图片（需在前端控制上传图片类型，大小）
+
 
 
 ## 4.4 服务单详情
 
 ```json
 {
-    "result": {
-        "request_number=": "01201606146471"
-         ...... //服务单信息
-    },
-    "status_code": 200
+  "result": {
+    "request_number=": "01201606214663",  //服务单号
+    "category=": "楼道=>灯泡=>爆炸", 
+    "contact": "小西",  //联系人
+    "contact_phone": "15800703186",  //联系人电话
+    "status": "新建",  //状态
+    "describing": "小西在报修",  //问题描述
+    "repairpic": "/repairpics/small/missing.png",  //维修前图片
+    "repairpicend": "/repairpicends/small/missing.png"  //维修后图片
+  },
+  "status_code": 200
 }
 ```
 
@@ -164,7 +178,7 @@ describing | 报修问题描述| 小西在报修哦
 
 参数名称 |  描述  | 示例值
 --------- | ----------- | -----------
-request_number | 服务单号| 01201606146471
+request_number | 服务单号| 01201606214663
 
 
 # 5.物业端
