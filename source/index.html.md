@@ -34,7 +34,7 @@ access_token是HI平台的全局唯一票据，第三方调用各接口时都需
 
 ## 4.1 服务单列表
 
-**说明：此接口为客户端与平台交互的初始接口，故在该接口的调用时，需传入用户身份信息（姓名、电话），以便获取随后进行身份标识的token值。**
+**说明：此接口为客户端与平台交互的初始接口，故在该接口的调用时，需传入用户身份信息（姓名、电话）进行模拟登录，以便获取随后进行身份标识的token值。**
 
 根据业主信息查询所属服务单
 
@@ -43,16 +43,18 @@ access_token是HI平台的全局唯一票据，第三方调用各接口时都需
   "result": {
     "incident_requests": [
       {
-        "request_number=": "01201606213389",
-        "node=": "花园小区3号楼1单元2层202室",
-        "contact_person=": "小西",
-        "category=": "楼道=>灯泡=>爆炸"
+        "request_number": "01201606213389",
+        "node": "花园小区3号楼1单元2层202室",
+        "contact_person": "小西",
+        "category": "楼道=>灯泡=>爆炸",
+        "request_time": "2016-06-22T16:23:07+08:00"  //提单时间
       },
       {
-        "request_number=": "01201606214663",
-        "node=": "花园小区3号楼3单元1层101室",
-        "contact_person=": "小西",
-        "category=": "楼道=>灯泡=>爆炸"
+        "request_number": "01201606214663",
+        "node": "花园小区3号楼3单元1层101室",
+        "contact_person": "小西",
+        "category": "楼道=>灯泡=>爆炸",
+        "request_time": "2016-06-21T14:23:07+08:00"  //提单时间
       }
     ]
   },
@@ -142,10 +144,11 @@ PENDING |处理中
 
 参数名称 |  描述  | 示例值
 --------- | ----------- | -----------
-property_number | 报修房间编号| A11-a-a-02-01
-category_one | 报修一级类型id| 0088000I5oZvTbnqzM4OHI
-category_two | 报修二级类型id| 0088000I5oZvTbnqzTH9km
-category_three | 报修三级类型id| 0088000I5oZvTbnqzanJBY
+property_number | 报修房间编号（必输）| A11-a-a-02-01
+category_one | 报修一级类型id（必输）| 0088000I5oZvTbnqzM4OHI
+category_two | 报修二级类型id（必输）| 0088000I5oZvTbnqzTH9km
+category_three | 报修三级类型id（必输）| 0088000I5oZvTbnqzanJBY
+appoint_time | 预约时间| 2016-06-22 18:39:00(注意时间格式)
 describing | 报修问题描述| 小西在报修哦
 repairpic | 维修前图片| 上传维修前图片（需在前端控制上传图片类型，大小）
 
@@ -156,11 +159,14 @@ repairpic | 维修前图片| 上传维修前图片（需在前端控制上传图
 ```json
 {
   "result": {
-    "request_number=": "01201606214663",  //服务单号
-    "category=": "楼道=>灯泡=>爆炸", 
+    "request_number": "01201606214663",  //服务单号
+    "request_time": "2016-05-30 15:30", //报修时间
+    "category": "楼道=>灯泡=>爆炸", 
     "contact": "小西",  //联系人
     "contact_phone": "15800703186",  //联系人电话
     "status": "新建",  //状态
+    "start_time": "2016-06-01 11:00",  //服务开始时间
+    "end_time": "2016-06-01 11:30",  //服务结束时间
     "describing": "小西在报修",  //问题描述
     "repairpic": "/repairpics/small/missing.png",  //维修前图片
     "repairpicend": "/repairpicends/small/missing.png"  //维修后图片
@@ -194,9 +200,10 @@ request_number | 服务单号| 01201606214663
   "result": {
     "incident_requests": [
       {
-        "request_number=": "01201606161281",
-        "contact_person=": "孔大娘",
-         //......
+        "request_number=": "01201606213389",
+        "node=": "花园小区3号楼1单元2层202室",
+        "contact_person=": "小西",
+        "category=": "楼道=>灯泡=>爆炸"
       }
     ]
   },
@@ -205,6 +212,8 @@ request_number | 服务单号| 01201606214663
   "status_code": "200"
 }
 ```
+
+
 
 ### HTTP请求
 
@@ -393,6 +402,7 @@ pay_party | 结算方code(必输)| TENANT_SETT
 settlement| 是否现场结算（Y为是，N为否）| Y
 repair_reason| 故障原因维修记录|换了个马桶
 add_explain| 备注| 孔大爷很满意
+repairpicend| 维修后照片| 上传维修后照片
 
 ## 5.7 物料搜索
 ```json
@@ -411,7 +421,6 @@ add_explain| 备注| 孔大爷很满意
 }
 ```
 
-
 对指定项目内的库存按照名称进行模糊查询
 ### HTTP请求
 *HTTP头附加token信息*
@@ -421,8 +430,259 @@ add_explain| 备注| 孔大爷很满意
 ### Input Parameters
 参数名称 |  描述  | 示例值
 --------- | ----------- | -----------
-project_id | 项目id| 005O000P1O8TqcyP1rdgdE
-material_name | 物料名称| 消毒液
+request_number | 服务单编号 *| 01201606233963
+material_name | 物料名称 *| 消毒液
+
+
+## 5.8 物料申请
+客户端确定批量创建的物料集合后，调用此接口，创建物料申请单（同步申请物料）。
+
+### HTTP请求
+*HTTP头附加token信息*
+
+> 传入参数示例
+
+```json
+{
+  "request_number": 01201606213748,
+  "application_form": [
+    {
+    "sh_number": "QNHWM001",   //仓库编码
+    "material_number": "item00130716",  //物料编码,
+    "count": "34"  //数量
+    },
+    {
+    "sh_number": "QNHWM002",   //仓库编码
+    "material_number": "item00130714",  //物料编码,
+    "count": "4"  //数量
+    }
+    ]
+}
+```
+
+> 返回结果
+
+```json
+//创建成功返回
+{
+  "status_code": 200
+}
+```
+
+
+`POST http://develop.cm-inv.com/api/v1/wm_materials/create_application`
+
+### Input Parameters
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+request_number | 服务单编号| 01201606213748
+application_form | 物料集合| 待申请物料集合
+
+
+## 5.9 物料签收
+
+客户端确定需要签收的物料集合后，调用此接口，进行物料签收。
+
+### HTTP请求
+*HTTP头附加token信息*
+
+> 传入参数示例（同物料申请）
+
+```json
+{
+  "request_number": 01201606213748,
+  "sign_form": [
+    {
+    "sh_number": "QNHWM001",   //仓库编码
+    "material_number": "item00130716",  //物料编码,
+    "count": "34"  //数量
+    },
+    {
+    "sh_number": "QNHWM002",   //仓库编码
+    "material_number": "item00130714",  //物料编码,
+    "count": "4"  //数量
+    }
+    ]
+}
+```
+
+> 返回结果
+
+```json
+//创建成功返回
+{
+  "status_code": 200
+}
+```
+
+
+`POST http://develop.cm-inv.com/api/v1/wm_materials/sign`
+
+### Input Parameters
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+request_number | 服务单编号| 01201606213748
+sign_form | 物料集合| 待签收物料集合
+
+
+## 5.10 费项条目列表
+
+获取费项条目
+
+### HTTP请求
+*HTTP头附加token信息*
+
+> 返回结果
+
+```json
+{
+  "result": [
+    {
+    "sh_number": "QNHWM001",   //仓库编码
+    "material_number": "item00130716",  //物料编码,
+    "count": "34"  //数量
+    },
+    {
+    "sh_number": "QNHWM002",   //仓库编码
+    "material_number": "item00130714",  //物料编码,
+    "count": "4"  //数量
+    }
+    ],
+  "status_code": 200
+}
+```
+
+`GET http://develop.cm-inv.com/api/v1/wm_materials`
+
+### Input Parameters
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+request_number | 服务单编号| 01201606213748
+
+
+## 5.11 物料列表
+
+根据服务单编号获取物料
+
+### HTTP请求
+*HTTP头附加token信息*
+
+> 返回结果
+
+```json
+{
+  "result": [
+    {
+    "sh_number": "QNHWM001",   //仓库编码
+    "material_number": "item00130716",  //物料编码,
+    "count": "34"  //数量
+    },
+    {
+    "sh_number": "QNHWM002",   //仓库编码
+    "material_number": "item00130714",  //物料编码,
+    "count": "4"  //数量
+    }
+    ],
+  "status_code": 200
+}
+```
+
+`GET http://develop.cm-inv.com/api/v1/wm_materials`
+
+### Input Parameters
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+request_number | 服务单编号| 01201606213748
+
+
+## 5.12 获取费项条目
+
+获取服务单相关费项
+
+### HTTP请求
+*HTTP头附加token信息*
+
+> 返回结果示例
+
+```json
+{
+  "result": {
+    "fees": [
+      {
+        "fee_id": "006I000P1OGHNdEZeHmQts",
+        "fee_name": "疏通下水道",
+        "repair_fee": "70.0"
+      },
+      {
+        "fee_id": "006I000P1OGHNdEZeWqdE0",
+        "fee_name": "水电表修理",
+        "repair_fee": "40.0"
+      },
+      {
+        "fee_id": "006I000P1OGdMJW9h3qw2y",
+        "fee_name": "门锁维护",
+        "repair_fee": "100.0"
+      },
+      {
+        "fee_id": "006I000A0tDin5qcq6M7hA",
+        "fee_name": "道路损坏",
+        "repair_fee": "4000.0"
+      },
+      {
+        "fee_id": "006I000P1OGdMJW9h3qw2y",
+        "fee_name": "门锁维护",
+        "repair_fee": "50.0"
+      },
+      {
+        "fee_id": "006I000P1OGHNdEZeHmQts",
+        "fee_name": "疏通下水道",
+        "repair_fee": "45.0"
+      },
+      {
+        "fee_id": "006I000P1OGHNdEZeWqdE0",
+        "fee_name": "水电表修理",
+        "repair_fee": "20.0"
+      }
+    ]
+  },
+  "status_code": 200
+}
+```
+
+`GET http://develop.cm-inv.com/api/v1/fees/items`
+
+### Input Parameters
+
+无
+
+
+## 5.13 保存费项信息
+
+获取服务单费用相关信息
+
+### HTTP请求
+*HTTP头附加token信息*
+
+> 返回结果示例
+
+```json
+{
+  "status_code": 200
+}
+```
+
+`POST http://develop.cm-inv.com/api/v1/fees`
+
+### Input Parameters
+参数名称 |  描述  | 示例值
+--------- | ----------- | -----------
+request_number | 服务单编号| 01201606213748
+fee_id | 费项对应id| 006I000P1OGdMJW9h3qw2y
+repair_fee | 费项对应价格| 30
+material_fees | 物料费用集合| 暂无格式，暂空
+
+
+
 
 
 
