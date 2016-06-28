@@ -74,7 +74,7 @@ access_token是HI平台的全局唯一票据，第三方调用各接口时都需
 role | 用户角色，在业主端调用时，该值为OWNER | OWNER
 user_name | 业主名称| 小西
 user_phone |业主电话| 15800703186
-status |请求的服务单状态| PENDING
+incident_status |请求的服务单状态| PENDING
 
 
 ### status value
@@ -164,9 +164,11 @@ repairpic | 维修前图片| 上传维修前图片（需在前端控制上传图
     "category": "楼道=>灯泡=>爆炸", 
     "contact": "小西",  //联系人
     "contact_phone": "15800703186",  //联系人电话
-    "status": "新建",  //状态
+    "incident_status": "新建",  //状态
     "start_time": "2016-06-01 11:00",  //服务开始时间
     "end_time": "2016-06-01 11:30",  //服务结束时间
+    "fee": "人工费-40",
+    "material_fee": "1320.0", //物料价格
     "describing": "小西在报修",  //问题描述
     "repairpic": "/repairpics/small/missing.png",  //维修前图片
     "repairpicend": "/repairpicends/small/missing.png"  //维修后图片
@@ -226,10 +228,10 @@ request_number | 服务单号| 01201606214663
 role | 用户角色，在物业端调用时，该值为STAFF | STAFF
 user_name | 物业人员名称| 孔老师
 user_phone |物业人员电话| 15284413186
-status |请求的服务单状态| DONE
+incident_status |请求的服务单状态| DONE
 
 
-### status value
+### incident_status value
 
 code |  描述
 --------- | -----------
@@ -323,13 +325,14 @@ parent_id | 父级建筑结构id | 006i000A0ruXeusRVEbFaq(花园小区)
 ### HTTP请求
 *HTTP头附加token信息*
 
-`PUT http://develop.cm-inv.com/api/v1/incident_requests/:id(附服务单编号)`
+`POST http://develop.cm-inv.com/api/v1/incident_requests/status`
 
 ### Input Parameters
 
 参数名称 |  描述  | 示例值
 --------- | ----------- | -----------
-action | 针对服务单的操作动作| DONE确认完成
+request_number | 服务单编号|01201606279842
+status_action | 针对服务单的操作动作| DONE确认完成
 
 ### action value
 code |  描述
@@ -413,6 +416,8 @@ repairpicend| 维修后照片| 上传维修后照片
 		"material_name": "消毒液11",
 		"material_number": "item00130716",
 		"sh_name": "青年汇仓库001",
+        "sh_number": "XXX",  #仓库编号
+        "material_price": "100", #物料价格
 		"material_count": 24
 		}
 	  ]
