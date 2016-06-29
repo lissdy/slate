@@ -188,6 +188,33 @@ repairpic | 维修前图片| 上传维修前图片（需在前端控制上传图
 --------- | ----------- | -----------
 request_number | 服务单号| 01201606214663
 
+## 4.5 业主房产信息
+
+ **说明：此接口为客户端在录入报修信息取得业主房产信息接口,需在HTTP Header中传入用户身份信息(token ps:由bp_id加密得到)**
+
+### HTTP请求
+
+ *HTTP头附加token信息*
+
+ `GET http://develop.cm-inv.com/api/v1/lejiahui_oauth/customer_house`
+
+```json
+{
+  "result": {
+   "property_info": [
+     {
+       "property_number": "A01-01-01-01-01",  //建筑实体编码(房间编码)
+       "property_name": "后现代城1号楼1单元1层101" //建筑实体名称(房间名称)
+      },
+      {
+       "property_number": "A01-01-01-01-02",
+       "property_name": "后现代城1号楼1单元1层102"
+      }
+   ]
+  },
+  "status_code": 200
+}
+```
 
 # 5.物业端
 
@@ -268,15 +295,18 @@ DONE | 经办
     "cascade_nodes": [
       {
         "id": "006i000A0ruBgEarUOOAfQ",
-        "structure_name": "1号楼"
+        "structure_name": "1号楼",
+        "property_number": "A01-01"
       },
       {
         "id": "006i000A0ruBgEarUPe264",
-        "structure_name": "2号楼"
+        "structure_name": "2号楼",
+        "property_number": "A01-02"
       },
       {
         "id": "006i000A0ruBgEarUQvJ9U",
-        "structure_name": "3号楼"
+        "structure_name": "3号楼",
+        "property_number": "A01-03"
       }
     ]
   },
