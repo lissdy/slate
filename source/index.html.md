@@ -576,28 +576,45 @@ request_number | 服务单编号| 01201606213748
 
 ```json
 {
-  "result": [
-    {
-    "sh_number": "QNHWM001",   //仓库编码
-    "material_number": "item00130716",  //物料编码,
-    "count": "34"  //数量
-    },
-    {
-    "sh_number": "QNHWM002",   //仓库编码
-    "material_number": "item00130714",  //物料编码,
-    "count": "4"  //数量
-    }
-    ],
+  "result": {
+    "request_materials": [
+      {
+        "material_number": "abc00000004",  //物料名称
+        "spare_part_price": "23.0",  //价格
+        "spare_part_number": 10,  //申请数量
+        "total_count": "3000.0"  //库存数量
+      },
+      {
+        "material_number": "abc00000003",
+        "spare_part_price": "10.0",
+        "spare_part_number": 10,
+        "total_count": "1988.0"
+      },
+      {
+        "material_number": "abc00000004",
+        "spare_part_price": "23.0",
+        "spare_part_number": 20,
+        "total_count": "3000.0"
+      },
+      {
+        "material_number": "abc00000004",
+        "spare_part_price": "23.0",
+        "spare_part_number": 13,
+        "total_count": "3000.0"
+      }
+    ]
+  },
   "status_code": 200
 }
 ```
 
-`GET http://develop.cm-inv.com/api/v1/wm_materials`
+`GET http://develop.cm-inv.com/api/v1/wm_materials/request_material_index`
 
 ### Input Parameters
 参数名称 |  描述  | 示例值
 --------- | ----------- | -----------
-request_number | 服务单编号| 01201606213748
+request_number | 服务单编号| 01201606247586
+
 
 
 ## 5.12 获取费项条目
